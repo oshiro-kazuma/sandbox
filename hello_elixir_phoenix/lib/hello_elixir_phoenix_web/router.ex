@@ -18,6 +18,7 @@ defmodule HelloElixirPhoenixWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    resources "/posts", PostController
   end
 
   # Other scopes may use custom stacks.
