@@ -65,3 +65,27 @@ You can also run your app inside IEx (Interactive Elixir) as:
     $ iex -S mix phx.server
 ```
 
+Create User API
+```
+mix phx.gen.schema User users name:string email:string
+* creating lib/hello_elixir_phoenix/user.ex
+* creating priv/repo/migrations/20240716025407_create_users.exs
+
+Remember to update your repository by running migrations:
+
+    $ mix ecto.migrate
+```
+
+Migrate
+```
+mix ecto.migrate
+Compiling 1 file (.ex)
+Generated hello_elixir_phoenix app
+
+11:54:46.878 [info] == Running 20240716025407 HelloElixirPhoenix.Repo.Migrations.CreateUsers.change/0 forward
+
+11:54:46.879 [info] create table users
+
+11:54:46.879 [info] == Migrated 20240716025407 in 0.0s
+```
+
