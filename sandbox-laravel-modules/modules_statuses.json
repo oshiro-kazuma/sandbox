@@ -1,4 +1,5 @@
 {
     "Admin": true,
-    "Shared": true
+    "Shared": true,
+    "ExternalApi": true
 }

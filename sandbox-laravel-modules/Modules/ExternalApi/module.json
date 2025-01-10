@@ -1,0 +1,11 @@
+{
+    "name": "ExternalApi",
+    "alias": "externalapi",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ExternalApi\\Providers\\ExternalApiServiceProvider"
+    ],
+    "files": []
+}
