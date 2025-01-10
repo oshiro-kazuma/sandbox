@@ -2,6 +2,7 @@
 
 namespace Modules\ExternalApi\Http\Controllers;
 
+use Modules\Shared\Constants;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -61,5 +62,10 @@ class ExternalApiController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function check()
+    {
+        return Constants::HOGE_1;
     }
 }

@@ -15,5 +15,6 @@ use Modules\ExternalApi\Http\Controllers\ExternalApiController;
 */
 
 Route::group([], function () {
+    Route::get('externalapi/check', [ExternalApiController::class, 'check']);
     Route::resource('externalapi', ExternalApiController::class)->names('externalapi');
 });
