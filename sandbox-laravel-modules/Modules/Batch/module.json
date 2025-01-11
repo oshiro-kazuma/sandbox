@@ -1,0 +1,11 @@
+{
+    "name": "Batch",
+    "alias": "batch",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Batch\\Providers\\BatchServiceProvider"
+    ],
+    "files": []
+}
