@@ -24,6 +24,12 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map(): void
     {
+        // ここを環境変数などによって有効/無効を切り替える
+        if (config('external-api.enabled')) {
+            $this->mapApiRoutes();
+            $this->mapWebRoutes();
+            return;
+        }
         $this->mapApiRoutes();
         $this->mapWebRoutes();
     }
