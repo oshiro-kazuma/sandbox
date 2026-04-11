@@ -1,13 +1,23 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { postsApi, uploadsApi } from '../api'
 import { useAuth } from '../lib/auth'
 import type { Post } from '../api/types'
 
+const API_BASE = import.meta.env.VITE_API_URL ?? ''
+
+function extractFirstImage(content: string): string | null {
+  const m = content.match(/!\[.*?\]\(([^)]+)\)/)
+  if (!m) return null
+  const src = m[1]
+  return src.startsWith('/uploads/') ? `${API_BASE}${src}` : src
+}
+
 export function Dashboard() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const queryClient = useQueryClient()
   const [editing, setEditing] = useState<Post | null>(null)
   const [form, setForm] = useState<{ title: string; slug: string; content: string; status: 'draft' | 'published' }>({
@@ -44,6 +54,18 @@ export function Dashboard() {
     mutationFn: postsApi.remove,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['posts'] }),
   })
+
+  // Home の編集ボタンから飛んできた場合、該当 post を編集状態にセット
+  useEffect(() => {
+    const editId = (location.state as { editId?: string } | null)?.editId
+    if (editId && posts) {
+      const target = posts.find((p) => p.id === editId)
+      if (target) {
+        startEdit(target)
+        window.history.replaceState({}, '')
+      }
+    }
+  }, [location.state, posts])
 
   if (!user) {
     navigate('/login', { replace: true })
@@ -190,32 +212,42 @@ export function Dashboard() {
             <p style={{ color: 'var(--text-3)', fontSize: '0.9rem', padding: '1rem 0' }}>まだ記事がありません</p>
           )}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            {posts?.map((post) => (
-              <div key={post.id} className="post-card--manage" style={{ padding: '0.9rem 0', borderBottom: '1px solid var(--border)' }}>
-                <div style={{ minWidth: 0 }}>
-                  <h3 style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{post.title}</h3>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.2rem' }}>
-                    <span className={`badge badge--${post.status}`}>
-                      {post.status === 'published' ? '公開' : '下書き'}
-                    </span>
-                    <span style={{ fontSize: '0.78rem', color: 'var(--text-3)' }}>
-                      {new Date(post.updated_at).toLocaleDateString('ja-JP')}
-                    </span>
+            {posts?.map((post) => {
+              const thumb = extractFirstImage(post.content)
+              return (
+                <div key={post.id} className="post-card--manage" style={{ padding: '0.9rem 0', borderBottom: '1px solid var(--border)' }}>
+                  {thumb && (
+                    <img
+                      src={thumb}
+                      alt=""
+                      style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 'var(--r-sm)', flexShrink: 0 }}
+                    />
+                  )}
+                  <div style={{ minWidth: 0, flex: 1 }}>
+                    <h3 style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{post.title}</h3>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.2rem' }}>
+                      <span className={`badge badge--${post.status}`}>
+                        {post.status === 'published' ? '公開' : '下書き'}
+                      </span>
+                      <span style={{ fontSize: '0.78rem', color: 'var(--text-3)' }}>
+                        {new Date(post.updated_at).toLocaleDateString('ja-JP')}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="post-actions">
+                    <button className="btn-secondary" onClick={() => startEdit(post)}>編集</button>
+                    <button
+                      className="btn-danger"
+                      onClick={() => {
+                        if (confirm('削除しますか？')) deleteMutation.mutate(post.id)
+                      }}
+                    >
+                      削除
+                    </button>
                   </div>
                 </div>
-                <div className="post-actions">
-                  <button className="btn-secondary" onClick={() => startEdit(post)}>編集</button>
-                  <button
-                    className="btn-danger"
-                    onClick={() => {
-                      if (confirm('削除しますか？')) deleteMutation.mutate(post.id)
-                    }}
-                  >
-                    削除
-                  </button>
-                </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </section>
       </div>
