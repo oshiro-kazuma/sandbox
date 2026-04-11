@@ -22,7 +22,7 @@ export function Register() {
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : ''
       if (msg.includes('409')) {
-        setError('ユーザー名またはメールアドレスが既に使われています')
+        setError('すでに登録済みです。ログインしてください。')
       } else {
         setError('登録に失敗しました')
       }

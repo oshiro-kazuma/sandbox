@@ -36,6 +36,13 @@ pub async fn register(
         ));
     }
 
+    let count: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM users")
+        .fetch_one(&state.db)
+        .await?;
+    if count > 0 {
+        return Err(AppError::Conflict("すでに登録済みです".to_string()));
+    }
+
     let salt = SaltString::generate(&mut OsRng);
     let password_hash = Argon2::default()
         .hash_password(body.password.as_bytes(), &salt)
