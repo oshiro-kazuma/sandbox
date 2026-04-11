@@ -16,21 +16,21 @@ export function Home() {
       {posts?.length === 0 && (
         <p className="empty">まだ記事がありません</p>
       )}
-      <div className="post-list">
+      <div className="feed">
         {posts?.map((post) => (
-          <article key={post.id} className="post-card">
-            <p className="post-meta">
+          <article key={post.id} className="feed-item">
+            <time className="feed-date">
               {new Date(post.created_at).toLocaleDateString('ja-JP', {
                 year: 'numeric', month: 'long', day: 'numeric',
               })}
-            </p>
-            <h2>
+            </time>
+            <h2 className="feed-title">
               <Link to={`/posts/${post.id}`}>{post.title}</Link>
             </h2>
-            <p className="post-excerpt">
-              {post.content.slice(0, 140)}{post.content.length > 140 && '…'}
+            <p className="feed-excerpt">
+              {post.content.slice(0, 160)}{post.content.length > 160 && '…'}
             </p>
-            <Link to={`/posts/${post.id}`} className="read-more">
+            <Link to={`/posts/${post.id}`} className="feed-more">
               続きを読む →
             </Link>
           </article>
