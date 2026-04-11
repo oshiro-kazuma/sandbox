@@ -374,6 +374,14 @@ button[type="submit"]:disabled { opacity: 0.5; cursor: not-allowed; transform: n
 .markdown h1 { font-size: 1.75rem; }
 .markdown h2 { font-size: 1.4rem; }
 .markdown h3 { font-size: 1.15rem; }
+
+/* feed 内では見出しをタイトルより小さく抑える */
+.feed-excerpt.markdown h1 { font-size: 1.15rem; }
+.feed-excerpt.markdown h2 { font-size: 1.05rem; }
+.feed-excerpt.markdown h3 { font-size: 0.95rem; }
+.feed-excerpt.markdown h1,
+.feed-excerpt.markdown h2,
+.feed-excerpt.markdown h3 { margin-top: 1.25rem; }
 .markdown p { margin-bottom: 1.25rem; }
 .markdown ul, .markdown ol { padding-left: 1.5rem; margin-bottom: 1.25rem; }
 .markdown li { margin-bottom: 0.35rem; }
