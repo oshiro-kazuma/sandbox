@@ -1,6 +1,5 @@
-import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { postsApi } from '../api'
@@ -20,7 +19,8 @@ const imgComponent = {
 export function Home() {
   const { user } = useAuth()
   const navigate = useNavigate()
-  const [page, setPage] = useState(1)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const page = Math.max(1, Number(searchParams.get('page') ?? 1))
 
   const { data: posts, isLoading, error } = useQuery({
     queryKey: ['posts'],
@@ -88,7 +88,7 @@ export function Home() {
       {totalPages > 1 && (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '3rem' }}>
           <button
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            onClick={() => setSearchParams({ page: String(Math.max(1, page - 1)) })}
             disabled={page === 1}
             style={{
               padding: '0.4rem 1rem',
@@ -105,7 +105,7 @@ export function Home() {
             {page} / {totalPages}
           </span>
           <button
-            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            onClick={() => setSearchParams({ page: String(Math.min(totalPages, page + 1)) })}
             disabled={page === totalPages}
             style={{
               padding: '0.4rem 1rem',
