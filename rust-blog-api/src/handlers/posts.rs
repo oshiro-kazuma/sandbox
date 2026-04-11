@@ -114,8 +114,8 @@ pub async fn create_post(
     let now = Utc::now().to_rfc3339();
 
     sqlx::query(
-        "INSERT INTO posts (id, title, slug, content, author_id, status, created_at, updated_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO posts (id, title, slug, content, author_id, status, created_at, updated_at, location)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
     )
     .bind(&id)
     .bind(&body.title)
@@ -125,6 +125,7 @@ pub async fn create_post(
     .bind(&status)
     .bind(&now)
     .bind(&now)
+    .bind(&body.location)
     .execute(&state.db)
     .await
     .map_err(|e| match e {
@@ -143,6 +144,7 @@ pub async fn create_post(
         status,
         created_at: now.clone(),
         updated_at: now,
+        location: body.location,
     };
     Ok((axum::http::StatusCode::CREATED, Json(post)))
 }
@@ -178,10 +180,11 @@ pub async fn update_post(
     let slug = body.slug.unwrap_or(post.slug);
     let content = body.content.unwrap_or(post.content);
     let status = body.status.unwrap_or(post.status);
+    let location = if body.location.is_some() { body.location } else { post.location };
     let updated_at = Utc::now().to_rfc3339();
 
     sqlx::query(
-        "UPDATE posts SET title = ?, slug = ?, content = ?, status = ?, updated_at = ?
+        "UPDATE posts SET title = ?, slug = ?, content = ?, status = ?, updated_at = ?, location = ?
          WHERE id = ?",
     )
     .bind(&title)
@@ -189,11 +192,12 @@ pub async fn update_post(
     .bind(&content)
     .bind(&status)
     .bind(&updated_at)
+    .bind(&location)
     .bind(&id)
     .execute(&state.db)
     .await?;
 
-    Ok(Json(Post { id, title, slug, content, author_id: post.author_id, status, created_at: post.created_at, updated_at }))
+    Ok(Json(Post { id, title, slug, content, author_id: post.author_id, status, created_at: post.created_at, updated_at, location }))
 }
 
 /// 投稿削除（作成者 or admin）
