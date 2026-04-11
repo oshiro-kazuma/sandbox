@@ -21,4 +21,4 @@ WORKDIR /app
 COPY --from=builder /app/target/release/rust-blog-api .
 
 EXPOSE 3000
-CMD ["./rust-blog-api"]
+CMD ["sh", "-c", "touch /data/blog.db && ./rust-blog-api"]

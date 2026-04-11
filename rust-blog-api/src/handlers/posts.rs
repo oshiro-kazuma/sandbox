@@ -164,7 +164,7 @@ pub async fn create_post(
 )]
 pub async fn update_post(
     State(state): State<AppState>,
-    auth: AuthUser,
+    _auth: AuthUser,
     Path(id): Path<String>,
     Json(body): Json<UpdatePostRequest>,
 ) -> AppResult<Json<Post>> {
@@ -212,10 +212,10 @@ pub async fn update_post(
 )]
 pub async fn delete_post(
     State(state): State<AppState>,
-    auth: AuthUser,
+    _auth: AuthUser,
     Path(id): Path<String>,
 ) -> AppResult<axum::http::StatusCode> {
-    let post: Post = sqlx::query_as("SELECT * FROM posts WHERE id = ?")
+    let _post: Post = sqlx::query_as("SELECT * FROM posts WHERE id = ?")
         .bind(&id)
         .fetch_optional(&state.db)
         .await?
