@@ -1,5 +1,5 @@
 use axum::{
-    routing::{get, patch, post},
+    routing::{delete, get, post, put},
     Router,
 };
 use sqlx::sqlite::SqlitePoolOptions;
@@ -47,8 +47,8 @@ impl Modify for BearerAuth {
 #[derive(OpenApi)]
 #[openapi(
     info(
-        title = "Headless Blog CMS",
-        description = "Axum + SQLite で作る複数ユーザー対応ブログ API",
+        title = "Blog CMS API",
+        description = "Axum + SQLite で作るシングルユーザーブログ API",
         version = "0.1.0"
     ),
     paths(
@@ -59,11 +59,7 @@ impl Modify for BearerAuth {
         handlers::posts::create_post,
         handlers::posts::update_post,
         handlers::posts::delete_post,
-        handlers::users::list_users,
         handlers::users::get_me,
-        handlers::users::update_me,
-        handlers::profiles::get_profile,
-        handlers::profiles::get_user_post,
         handlers::uploads::upload_image,
     ),
     components(schemas(
@@ -71,20 +67,17 @@ impl Modify for BearerAuth {
         models::LoginRequest,
         models::LoginResponse,
         models::UserResponse,
-        models::UpdateProfileRequest,
         models::Post,
         models::CreatePostRequest,
         models::UpdatePostRequest,
         handlers::uploads::UploadResponse,
-        handlers::profiles::PublicProfile,
     )),
     modifiers(&BearerAuth),
     tags(
-        (name = "auth",     description = "認証"),
-        (name = "posts",    description = "投稿 CRUD"),
-        (name = "users",    description = "ユーザー管理"),
-        (name = "profiles", description = "公開プロフィール"),
-        (name = "uploads",  description = "画像アップロード"),
+        (name = "auth",    description = "認証"),
+        (name = "posts",   description = "投稿 CRUD"),
+        (name = "users",   description = "ユーザー"),
+        (name = "uploads", description = "画像アップロード"),
     )
 )]
 struct ApiDoc;
@@ -153,12 +146,8 @@ fn api_routes() -> Router<AppState> {
         .route("/posts/:id", get(handlers::posts::get_post)
                                  .put(handlers::posts::update_post)
                                  .delete(handlers::posts::delete_post))
-        // users
-        .route("/users",    get(handlers::users::list_users))
-        .route("/users/me", get(handlers::users::get_me).patch(handlers::users::update_me))
-        // public profiles
-        .route("/u/:url_path", get(handlers::profiles::get_profile))
-        .route("/u/:url_path/posts/:slug", get(handlers::profiles::get_user_post))
+        // user
+        .route("/users/me", get(handlers::users::get_me))
         // uploads
         .route("/uploads", post(handlers::uploads::upload_image))
 }

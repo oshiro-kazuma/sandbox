@@ -10,7 +10,7 @@ export function Dashboard() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const [editing, setEditing] = useState<Post | null>(null)
-  const [form, setForm] = useState({ title: '', slug: '', content: '', status: 'draft' as const })
+  const [form, setForm] = useState<{ title: string; slug: string; content: string; status: 'draft' | 'published' }>({ title: '', slug: '', content: '', status: 'draft' })
   const [uploading, setUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)

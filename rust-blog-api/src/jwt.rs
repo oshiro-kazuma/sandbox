@@ -14,17 +14,16 @@ use crate::{error::{AppError, AppResult}, AppState};
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Claims {
     pub sub: String,   // user id
-    pub role: String,
     pub exp: usize,
 }
 
-pub fn create_token(user_id: &str, role: &str, secret: &str) -> AppResult<String> {
+pub fn create_token(user_id: &str, secret: &str) -> AppResult<String> {
     let exp = Utc::now()
         .checked_add_signed(Duration::hours(24))
         .unwrap()
         .timestamp() as usize;
 
-    let claims = Claims { sub: user_id.to_string(), role: role.to_string(), exp };
+    let claims = Claims { sub: user_id.to_string(), exp };
 
     encode(
         &Header::default(),
@@ -50,11 +49,7 @@ pub fn verify_token(token: &str, secret: &str) -> AppResult<Claims> {
 #[derive(Debug, Clone)]
 pub struct AuthUser {
     pub user_id: String,
-    pub role: String,
 }
-
-/// Admin-only gate (wraps AuthUser)
-pub struct AdminUser(pub AuthUser);
 
 #[async_trait]
 impl FromRequestParts<AppState> for AuthUser {
@@ -63,20 +58,7 @@ impl FromRequestParts<AppState> for AuthUser {
     async fn from_request_parts(parts: &mut Parts, state: &AppState) -> Result<Self, Self::Rejection> {
         let token = bearer_token(&parts.headers)?;
         let claims = verify_token(&token, &state.jwt_secret)?;
-        Ok(AuthUser { user_id: claims.sub, role: claims.role })
-    }
-}
-
-#[async_trait]
-impl FromRequestParts<AppState> for AdminUser {
-    type Rejection = AppError;
-
-    async fn from_request_parts(parts: &mut Parts, state: &AppState) -> Result<Self, Self::Rejection> {
-        let user = AuthUser::from_request_parts(parts, state).await?;
-        if user.role != "admin" {
-            return Err(AppError::Forbidden);
-        }
-        Ok(AdminUser(user))
+        Ok(AuthUser { user_id: claims.sub })
     }
 }
 

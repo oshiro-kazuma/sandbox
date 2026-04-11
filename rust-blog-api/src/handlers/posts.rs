@@ -53,11 +53,8 @@ pub async fn get_post(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    if post.status == "draft" {
-        match &maybe_user {
-            Some(u) if u.role == "admin" || u.user_id == post.author_id => {}
-            _ => return Err(AppError::Forbidden),
-        }
+    if post.status == "draft" && maybe_user.is_none() {
+        return Err(AppError::Forbidden);
     }
 
     Ok(Json(post))
@@ -154,10 +151,6 @@ pub async fn update_post(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    if auth.role != "admin" && auth.user_id != post.author_id {
-        return Err(AppError::Forbidden);
-    }
-
     let title = body.title.unwrap_or(post.title);
     let slug = body.slug.unwrap_or(post.slug);
     let content = body.content.unwrap_or(post.content);
@@ -204,10 +197,6 @@ pub async fn delete_post(
         .fetch_optional(&state.db)
         .await?
         .ok_or(AppError::NotFound)?;
-
-    if auth.role != "admin" && auth.user_id != post.author_id {
-        return Err(AppError::Forbidden);
-    }
 
     sqlx::query("DELETE FROM posts WHERE id = ?")
         .bind(&id)

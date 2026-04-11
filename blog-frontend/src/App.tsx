@@ -2,18 +2,17 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AuthProvider, useAuth } from './lib/auth'
 import { Navbar } from './components/Navbar'
-import { Profile } from './pages/Profile'
-import { UserPost } from './pages/UserPost'
+import { Home } from './pages/Home'
+import { PostDetail } from './pages/PostDetail'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
 import { Dashboard } from './pages/Dashboard'
-import { Settings } from './pages/Settings'
 
 const queryClient = new QueryClient()
 
-function RootRedirect() {
+function RequireAuth({ children }: { children: React.ReactNode }) {
   const { user } = useAuth()
-  return <Navigate to={user ? '/u/dashboard' : '/login'} replace />
+  return user ? <>{children}</> : <Navigate to="/login" replace />
 }
 
 export function App() {
@@ -23,17 +22,11 @@ export function App() {
         <BrowserRouter>
           <Navbar />
           <Routes>
-            {/* root */}
-            <Route path="/" element={<RootRedirect />} />
-            {/* auth */}
+            <Route path="/" element={<Home />} />
+            <Route path="/posts/:id" element={<PostDetail />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            {/* authenticated — /u/* 配下 */}
-            <Route path="/u/dashboard" element={<Dashboard />} />
-            <Route path="/u/settings" element={<Settings />} />
-            {/* public — /:handle 配下 */}
-            <Route path="/:handle" element={<Profile />} />
-            <Route path="/:handle/posts/:slug" element={<UserPost />} />
+            <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>
