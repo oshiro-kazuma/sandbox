@@ -13,7 +13,7 @@ export function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-inner">
-        <Link to="/" className="nav-brand">Blog</Link>
+        <Link to="/" className="nav-brand">ら〜めんブログ🍜</Link>
         <div className="nav-links">
           {user ? (
             <>

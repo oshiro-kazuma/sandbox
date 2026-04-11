@@ -30,8 +30,12 @@ export function Home() {
   if (isLoading) return <div className="loading">読み込み中…</div>
   if (error) return <div className="error">エラーが発生しました</div>
 
+  const getPostDate = (slug: string, createdAt: string) => {
+    const m = slug.match(/^(\d{4}-\d{2}-\d{2})/)
+    return m ? new Date(m[1]).getTime() : new Date(createdAt).getTime()
+  }
   const sorted = [...(posts ?? [])].sort(
-    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    (a, b) => getPostDate(b.slug, b.created_at) - getPostDate(a.slug, a.created_at)
   )
   const totalPages = Math.ceil(sorted.length / PAGE_SIZE)
   const paged = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
