@@ -30,6 +30,29 @@ pub async fn list_posts(State(state): State<AppState>) -> AppResult<Json<Vec<Pos
     Ok(Json(posts))
 }
 
+/// 全投稿一覧（下書き含む・要認証）
+#[utoipa::path(
+    get,
+    path = "/api/posts/all",
+    tag = "posts",
+    security(("bearer_auth" = [])),
+    responses(
+        (status = 200, description = "全投稿一覧", body = Vec<Post>),
+        (status = 401, description = "未認証"),
+    )
+)]
+pub async fn list_all_posts(
+    State(state): State<AppState>,
+    _auth: AuthUser,
+) -> AppResult<Json<Vec<Post>>> {
+    let posts = sqlx::query_as::<_, Post>(
+        "SELECT * FROM posts ORDER BY created_at DESC",
+    )
+    .fetch_all(&state.db)
+    .await?;
+    Ok(Json(posts))
+}
+
 /// 投稿詳細（下書きは作成者 or admin のみ）
 #[utoipa::path(
     get,

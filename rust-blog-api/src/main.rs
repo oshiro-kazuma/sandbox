@@ -142,6 +142,7 @@ fn api_routes() -> Router<AppState> {
         .route("/auth/register", post(handlers::auth::register))
         .route("/auth/login",    post(handlers::auth::login))
         // posts
+        .route("/posts/all", get(handlers::posts::list_all_posts))
         .route("/posts",     get(handlers::posts::list_posts).post(handlers::posts::create_post))
         .route("/posts/:id", get(handlers::posts::get_post)
                                  .put(handlers::posts::update_post)

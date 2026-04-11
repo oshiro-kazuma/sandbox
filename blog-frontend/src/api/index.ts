@@ -19,6 +19,9 @@ export const postsApi = {
   list: () =>
     customInstance<Post[]>({ method: 'GET', url: '/api/posts' }),
 
+  listAll: () =>
+    customInstance<Post[]>({ method: 'GET', url: '/api/posts/all' }),
+
   get: (id: string) =>
     customInstance<Post>({ method: 'GET', url: `/api/posts/${id}` }),
 

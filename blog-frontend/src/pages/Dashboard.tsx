@@ -18,8 +18,8 @@ export function Dashboard() {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const { data: posts, isLoading } = useQuery({
-    queryKey: ['posts'],
-    queryFn: postsApi.list,
+    queryKey: ['posts', 'all'],
+    queryFn: postsApi.listAll,
   })
 
   const createMutation = useMutation({
