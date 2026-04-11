@@ -1,5 +1,5 @@
 use axum::{
-    routing::{delete, get, post, put},
+    routing::{get, patch, post},
     Router,
 };
 use sqlx::sqlite::SqlitePoolOptions;
@@ -60,6 +60,9 @@ impl Modify for BearerAuth {
         handlers::posts::update_post,
         handlers::posts::delete_post,
         handlers::users::list_users,
+        handlers::users::get_me,
+        handlers::users::update_me,
+        handlers::profiles::get_profile,
         handlers::uploads::upload_image,
     ),
     components(schemas(
@@ -67,17 +70,20 @@ impl Modify for BearerAuth {
         models::LoginRequest,
         models::LoginResponse,
         models::UserResponse,
+        models::UpdateProfileRequest,
         models::Post,
         models::CreatePostRequest,
         models::UpdatePostRequest,
         handlers::uploads::UploadResponse,
+        handlers::profiles::PublicProfile,
     )),
     modifiers(&BearerAuth),
     tags(
-        (name = "auth",  description = "認証"),
-        (name = "posts", description = "投稿 CRUD"),
-        (name = "users",   description = "ユーザー管理（admin 専用）"),
-        (name = "uploads", description = "画像アップロード"),
+        (name = "auth",     description = "認証"),
+        (name = "posts",    description = "投稿 CRUD"),
+        (name = "users",    description = "ユーザー管理"),
+        (name = "profiles", description = "公開プロフィール"),
+        (name = "uploads",  description = "画像アップロード"),
     )
 )]
 struct ApiDoc;
@@ -146,8 +152,11 @@ fn api_routes() -> Router<AppState> {
         .route("/posts/:id", get(handlers::posts::get_post)
                                  .put(handlers::posts::update_post)
                                  .delete(handlers::posts::delete_post))
-        // users (admin)
-        .route("/users", get(handlers::users::list_users))
+        // users
+        .route("/users",    get(handlers::users::list_users))
+        .route("/users/me", get(handlers::users::get_me).patch(handlers::users::update_me))
+        // public profiles
+        .route("/u/:url_path", get(handlers::profiles::get_profile))
         // uploads
         .route("/uploads", post(handlers::uploads::upload_image))
 }

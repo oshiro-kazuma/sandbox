@@ -16,8 +16,12 @@ export function Navbar() {
       <div className="nav-links">
         {user ? (
           <>
-            <span className="nav-user">{user.username}</span>
+            {user.url_path && (
+              <Link to={`/u/${user.url_path}`} className="nav-user">{user.username}</Link>
+            )}
+            {!user.url_path && <span className="nav-user">{user.username}</span>}
             <Link to="/dashboard">ダッシュボード</Link>
+            <Link to="/settings">設定</Link>
             <button onClick={handleLogout} className="btn-link">ログアウト</button>
           </>
         ) : (

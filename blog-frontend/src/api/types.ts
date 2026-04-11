@@ -1,11 +1,9 @@
-// Rust API の models.rs と対応する型定義
-// pnpm generate 実行後は src/api/generated/ の型に置き換えられる
-
 export type UserResponse = {
   id: string
   username: string
   email: string
   role: string
+  url_path: string | null
   created_at: string
 }
 
@@ -18,6 +16,12 @@ export type Post = {
   status: 'draft' | 'published'
   created_at: string
   updated_at: string
+}
+
+export type PublicProfile = {
+  username: string
+  url_path: string
+  posts: Post[]
 }
 
 export type LoginResponse = {
