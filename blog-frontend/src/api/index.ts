@@ -47,6 +47,9 @@ export const usersApi = {
 export const profilesApi = {
   get: (urlPath: string) =>
     customInstance<PublicProfile>({ method: 'GET', url: `/api/u/${urlPath}` }),
+
+  getPost: (urlPath: string, slug: string) =>
+    customInstance<Post>({ method: 'GET', url: `/api/u/${urlPath}/posts/${slug}` }),
 }
 
 export const uploadsApi = {

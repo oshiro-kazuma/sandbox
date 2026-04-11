@@ -63,6 +63,7 @@ impl Modify for BearerAuth {
         handlers::users::get_me,
         handlers::users::update_me,
         handlers::profiles::get_profile,
+        handlers::profiles::get_user_post,
         handlers::uploads::upload_image,
     ),
     components(schemas(
@@ -157,6 +158,7 @@ fn api_routes() -> Router<AppState> {
         .route("/users/me", get(handlers::users::get_me).patch(handlers::users::update_me))
         // public profiles
         .route("/u/:url_path", get(handlers::profiles::get_profile))
+        .route("/u/:url_path/posts/:slug", get(handlers::profiles::get_user_post))
         // uploads
         .route("/uploads", post(handlers::uploads::upload_image))
 }

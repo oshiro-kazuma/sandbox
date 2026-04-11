@@ -8,6 +8,7 @@ import { Login } from './pages/Login'
 import { Register } from './pages/Register'
 import { Dashboard } from './pages/Dashboard'
 import { Profile } from './pages/Profile'
+import { UserPost } from './pages/UserPost'
 import { Settings } from './pages/Settings'
 
 const queryClient = new QueryClient()
@@ -26,6 +27,7 @@ export function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/u/:urlPath" element={<Profile />} />
+            <Route path="/u/:handle/posts/:slug" element={<UserPost />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>
