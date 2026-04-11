@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
+import { Link } from 'react-router-dom'
 import { postsApi } from '../api'
 
 export function Home() {
@@ -26,12 +25,15 @@ export function Home() {
                 year: 'numeric', month: 'long', day: 'numeric',
               })}
             </p>
-            <h2>{post.title}</h2>
-            <div className="post-content markdown">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {post.content}
-              </ReactMarkdown>
-            </div>
+            <h2>
+              <Link to={`/posts/${post.id}`}>{post.title}</Link>
+            </h2>
+            <p className="post-excerpt">
+              {post.content.slice(0, 140)}{post.content.length > 140 && '…'}
+            </p>
+            <Link to={`/posts/${post.id}`} className="read-more">
+              続きを読む →
+            </Link>
           </article>
         ))}
       </div>
