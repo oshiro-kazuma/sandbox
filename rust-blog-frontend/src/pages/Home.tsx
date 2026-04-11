@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -19,7 +19,14 @@ const imgComponent = {
 export function Home() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const [searchParams, setSearchParams] = useSearchParams()
+
+  const draftMutation = useMutation({
+    mutationFn: (post: NonNullable<typeof posts>[number]) =>
+      postsApi.update(post.id, { title: post.title, slug: post.slug, content: post.content, status: 'draft' }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['posts'] }),
+  })
   const page = Math.max(1, Number(searchParams.get('page') ?? 1))
 
   const { data: posts, isLoading, error } = useQuery({
@@ -58,22 +65,41 @@ export function Home() {
                 <Link to={`/posts/${post.id}`}>{post.title}</Link>
               </h2>
               {user && (
-                <button
-                  onClick={() => navigate('/dashboard', { state: { editId: post.id } })}
-                  style={{
-                    flexShrink: 0,
-                    fontSize: '0.72rem',
-                    padding: '0.15rem 0.5rem',
-                    borderRadius: '4px',
-                    border: '1px solid var(--border-strong)',
-                    background: 'transparent',
-                    color: 'var(--text-3)',
-                    cursor: 'pointer',
-                    lineHeight: 1.4,
-                  }}
-                >
-                  編集
-                </button>
+                <>
+                  <button
+                    onClick={() => navigate('/dashboard', { state: { editId: post.id } })}
+                    style={{
+                      flexShrink: 0,
+                      fontSize: '0.72rem',
+                      padding: '0.15rem 0.5rem',
+                      borderRadius: '4px',
+                      border: '1px solid var(--border-strong)',
+                      background: 'transparent',
+                      color: 'var(--text-3)',
+                      cursor: 'pointer',
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    編集
+                  </button>
+                  <button
+                    onClick={() => draftMutation.mutate(post)}
+                    disabled={draftMutation.isPending}
+                    style={{
+                      flexShrink: 0,
+                      fontSize: '0.72rem',
+                      padding: '0.15rem 0.5rem',
+                      borderRadius: '4px',
+                      border: '1px solid var(--border-strong)',
+                      background: 'transparent',
+                      color: 'var(--text-3)',
+                      cursor: 'pointer',
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    下書きにする
+                  </button>
+                </>
               )}
             </div>
             <div className="feed-excerpt markdown">
@@ -88,7 +114,7 @@ export function Home() {
       {totalPages > 1 && (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '3rem' }}>
           <button
-            onClick={() => setSearchParams({ page: String(Math.max(1, page - 1)) })}
+            onClick={() => { setSearchParams({ page: String(Math.max(1, page - 1)) }); window.scrollTo({ top: 0 }); (document.activeElement as HTMLElement)?.blur() }}
             disabled={page === 1}
             style={{
               padding: '0.4rem 1rem',
@@ -105,7 +131,7 @@ export function Home() {
             {page} / {totalPages}
           </span>
           <button
-            onClick={() => setSearchParams({ page: String(Math.min(totalPages, page + 1)) })}
+            onClick={() => { setSearchParams({ page: String(Math.min(totalPages, page + 1)) }); window.scrollTo({ top: 0 }); (document.activeElement as HTMLElement)?.blur() }}
             disabled={page === totalPages}
             style={{
               padding: '0.4rem 1rem',
