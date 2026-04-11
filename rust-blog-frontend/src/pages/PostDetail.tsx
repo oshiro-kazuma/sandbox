@@ -22,7 +22,7 @@ export function PostDetail() {
       <article className="post-detail">
         <header>
           <p className="post-meta">
-            {new Date(post.created_at).toLocaleDateString('ja-JP', {
+            {new Date(post.post_date ?? post.created_at).toLocaleDateString('ja-JP', {
               year: 'numeric', month: 'long', day: 'numeric',
             })}
             {post.status === 'draft' && <span className="badge-draft">下書き</span>}

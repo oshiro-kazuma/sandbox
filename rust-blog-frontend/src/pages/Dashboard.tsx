@@ -212,10 +212,9 @@ export function Dashboard() {
             <p style={{ color: 'var(--text-3)', fontSize: '0.9rem', padding: '1rem 0' }}>まだ記事がありません</p>
           )}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            {[...(posts ?? [])].sort((a, b) => {
-              const d = (p: typeof a) => { const m = p.slug.match(/^(\d{4}-\d{2}-\d{2})/); return m ? new Date(m[1]).getTime() : new Date(p.created_at).getTime() }
-              return d(b) - d(a)
-            }).map((post) => {
+            {[...(posts ?? [])].sort((a, b) =>
+              new Date(b.post_date ?? b.created_at).getTime() - new Date(a.post_date ?? a.created_at).getTime()
+            ).map((post) => {
               const thumb = extractFirstImage(post.content)
               return (
                 <div key={post.id} className="post-card--manage" style={{ padding: '0.9rem 0', borderBottom: '1px solid var(--border)' }}>

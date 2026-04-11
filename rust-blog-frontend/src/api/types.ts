@@ -14,6 +14,8 @@ export type Post = {
   status: 'draft' | 'published'
   created_at: string
   updated_at: string
+  location?: string
+  post_date?: string
 }
 
 export type LoginResponse = {
