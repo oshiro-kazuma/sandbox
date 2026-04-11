@@ -19,7 +19,7 @@ pub struct UploadResponse {
     post,
     path = "/api/uploads",
     tag = "uploads",
-    request_body(content_type = "multipart/form-data", description = "file フィールドに画像を添付"),
+    request_body(content = String, description = "multipart/form-data: file フィールドに画像を添付", content_type = "multipart/form-data"),
     security(("bearer_auth" = [])),
     responses(
         (status = 200, description = "アップロード成功", body = UploadResponse),
@@ -33,7 +33,7 @@ pub async fn upload_image(
     mut multipart: Multipart,
 ) -> AppResult<Json<UploadResponse>> {
     while let Some(field) = multipart.next_field().await? {
-        if field.name() != Some("file") {
+        if field.name() != Some("file" as &str) {
             continue;
         }
 
