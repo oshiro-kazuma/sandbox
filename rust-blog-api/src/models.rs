@@ -59,6 +59,7 @@ pub struct Post {
     pub status: String,
     pub created_at: String,
     pub updated_at: String,
+    pub location: Option<String>,
 }
 
 #[derive(Debug, Deserialize, ToSchema)]
@@ -67,6 +68,7 @@ pub struct CreatePostRequest {
     pub slug: String,
     pub content: String,
     pub status: Option<String>,
+    pub location: Option<String>,
 }
 
 #[derive(Debug, Deserialize, ToSchema)]
@@ -75,4 +77,5 @@ pub struct UpdatePostRequest {
     pub slug: Option<String>,
     pub content: Option<String>,
     pub status: Option<String>,
+    pub location: Option<String>,
 }
