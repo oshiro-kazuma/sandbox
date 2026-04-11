@@ -13,7 +13,6 @@ export function Home() {
 
   return (
     <main className="container">
-      <h1>記事</h1>
       {posts?.length === 0 && (
         <p className="empty">まだ記事がありません</p>
       )}
