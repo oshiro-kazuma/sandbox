@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { authApi } from '../api'
 import { useAuth } from '../lib/auth'
 
@@ -18,7 +18,7 @@ export function Login() {
     try {
       const res = await authApi.login({ email, password })
       login(res.token, res.user)
-      navigate('/u/dashboard')
+      navigate('/dashboard')
     } catch {
       setError('メールアドレスまたはパスワードが違います')
     } finally {
@@ -30,6 +30,7 @@ export function Login() {
     <main className="container">
       <div className="form-card">
         <h1>ログイン</h1>
+        <p className="form-note">このブログは管理者のみ利用できます。</p>
         {error && <p className="form-error">{error}</p>}
         <form onSubmit={handleSubmit}>
           <label>
@@ -55,9 +56,6 @@ export function Login() {
             {loading ? 'ログイン中...' : 'ログイン'}
           </button>
         </form>
-        <p className="form-footer">
-          アカウントがない場合は <Link to="/register">新規登録</Link>
-        </p>
       </div>
     </main>
   )

@@ -122,6 +122,7 @@ button[type="submit"]:disabled { opacity: 0.6; cursor: not-allowed; }
 .btn-danger:hover { background: #fef2f2; }
 .form-actions { display: flex; gap: 0.75rem; }
 .form-error { color: #dc2626; font-size: 0.9rem; padding: 0.5rem; background: #fef2f2; border-radius: 4px; }
+.form-note  { color: #6b7280; font-size: 0.85rem; margin-bottom: 0.5rem; }
 .form-footer { text-align: center; font-size: 0.9rem; color: #6b7280; }
 
 /* Dashboard */
