@@ -1,17 +1,20 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { AuthProvider } from './lib/auth'
+import { AuthProvider, useAuth } from './lib/auth'
 import { Navbar } from './components/Navbar'
-import { Home } from './pages/Home'
-import { PostDetail } from './pages/PostDetail'
+import { Profile } from './pages/Profile'
+import { UserPost } from './pages/UserPost'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
 import { Dashboard } from './pages/Dashboard'
-import { Profile } from './pages/Profile'
-import { UserPost } from './pages/UserPost'
 import { Settings } from './pages/Settings'
 
 const queryClient = new QueryClient()
+
+function RootRedirect() {
+  const { user } = useAuth()
+  return <Navigate to={user ? '/u/dashboard' : '/login'} replace />
+}
 
 export function App() {
   return (
@@ -20,14 +23,17 @@ export function App() {
         <BrowserRouter>
           <Navbar />
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/posts/:id" element={<PostDetail />} />
+            {/* root */}
+            <Route path="/" element={<RootRedirect />} />
+            {/* auth */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/u/:urlPath" element={<Profile />} />
-            <Route path="/u/:handle/posts/:slug" element={<UserPost />} />
+            {/* authenticated — /u/* 配下 */}
+            <Route path="/u/dashboard" element={<Dashboard />} />
+            <Route path="/u/settings" element={<Settings />} />
+            {/* public — /:handle 配下 */}
+            <Route path="/:handle" element={<Profile />} />
+            <Route path="/:handle/posts/:slug" element={<UserPost />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

@@ -7,7 +7,7 @@ export function Navbar() {
 
   const handleLogout = () => {
     logout()
-    navigate('/')
+    navigate('/login')
   }
 
   return (
@@ -16,12 +16,12 @@ export function Navbar() {
       <div className="nav-links">
         {user ? (
           <>
-            {user.url_path && (
-              <Link to={`/u/${user.url_path}`} className="nav-user">{user.username}</Link>
-            )}
-            {!user.url_path && <span className="nav-user">{user.username}</span>}
-            <Link to="/dashboard">ダッシュボード</Link>
-            <Link to="/settings">設定</Link>
+            {user.url_path
+              ? <Link to={`/${user.url_path}`} className="nav-user">{user.username}</Link>
+              : <span className="nav-user">{user.username}</span>
+            }
+            <Link to="/u/dashboard">ダッシュボード</Link>
+            <Link to="/u/settings">設定</Link>
             <button onClick={handleLogout} className="btn-link">ログアウト</button>
           </>
         ) : (

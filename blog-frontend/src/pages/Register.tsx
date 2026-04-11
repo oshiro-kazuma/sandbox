@@ -33,7 +33,7 @@ export function Register() {
       await authApi.register(form)
       const res = await authApi.login({ email: form.email, password: form.password })
       login(res.token, res.user)
-      navigate('/dashboard')
+      navigate('/u/dashboard')
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : ''
       if (msg.includes('409') || msg.includes('重複')) {

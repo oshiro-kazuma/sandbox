@@ -43,7 +43,7 @@ export function Dashboard() {
   })
 
   if (!user) {
-    navigate('/login')
+    navigate('/login', { replace: true })
     return null
   }
 

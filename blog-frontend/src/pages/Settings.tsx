@@ -26,7 +26,7 @@ export function Settings() {
   })
 
   if (!user) {
-    navigate('/login')
+    navigate('/login', { replace: true })
     return null
   }
 

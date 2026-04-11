@@ -18,7 +18,7 @@ export function Login() {
     try {
       const res = await authApi.login({ email, password })
       login(res.token, res.user)
-      navigate('/dashboard')
+      navigate('/u/dashboard')
     } catch {
       setError('メールアドレスまたはパスワードが違います')
     } finally {

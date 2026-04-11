@@ -28,7 +28,7 @@ export function Profile() {
           {profile.posts.map((post) => (
             <article key={post.id} className="post-card">
               <h3>
-                <Link to={`/u/${profile.url_path}/posts/${post.slug}`}>{post.title}</Link>
+                <Link to={`/${profile.url_path}/posts/${post.slug}`}>{post.title}</Link>
               </h3>
               <p className="post-meta">
                 {new Date(post.created_at).toLocaleDateString('ja-JP')}
@@ -37,7 +37,7 @@ export function Profile() {
                 {post.content.slice(0, 120)}
                 {post.content.length > 120 && '…'}
               </p>
-              <Link to={`/u/${profile.url_path}/posts/${post.slug}`} className="read-more">続きを読む →</Link>
+              <Link to={`/${profile.url_path}/posts/${post.slug}`} className="read-more">続きを読む →</Link>
             </article>
           ))}
         </div>

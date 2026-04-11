@@ -19,7 +19,7 @@ export function UserPost() {
 
   return (
     <main className="container">
-      <Link to={`/u/${handle}`} className="back-link">← {handle} の記事一覧</Link>
+      <Link to={`/${handle}`} className="back-link">← {handle} の記事一覧</Link>
       <article className="post-detail">
         <header>
           <h1>{post.title}</h1>
