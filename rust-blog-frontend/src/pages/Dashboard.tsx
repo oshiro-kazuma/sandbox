@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { postsApi, uploadsApi } from '../api'
 import { useAuth } from '../lib/auth'
 import type { Post } from '../api/types'
@@ -227,7 +227,9 @@ export function Dashboard() {
                     />
                   )}
                   <div style={{ minWidth: 0, flex: 1 }}>
-                    <h3 style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{post.title}</h3>
+                    <h3 style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      <Link to={`/posts/${post.id}`} style={{ color: 'inherit', textDecoration: 'none' }}>{post.title}</Link>
+                    </h3>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.2rem' }}>
                       <span className={`badge badge--${post.status}`}>
                         {post.status === 'published' ? '公開' : '下書き'}
