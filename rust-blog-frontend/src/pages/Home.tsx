@@ -30,7 +30,17 @@ export function Home() {
               <Link to={`/posts/${post.id}`}>{post.title}</Link>
             </h2>
             <div className="feed-excerpt markdown">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  img: ({ src, alt }) => (
+                    <img
+                      src={src?.startsWith('/uploads/') ? `${import.meta.env.VITE_API_URL ?? ''}${src}` : src}
+                      alt={alt}
+                    />
+                  ),
+                }}
+              >
                 {post.content}
               </ReactMarkdown>
             </div>

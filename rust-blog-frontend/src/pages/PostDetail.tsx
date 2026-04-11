@@ -30,7 +30,17 @@ export function PostDetail() {
           <h1>{post.title}</h1>
         </header>
         <div className="post-content markdown">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+              img: ({ src, alt }) => (
+                <img
+                  src={src?.startsWith('/uploads/') ? `${import.meta.env.VITE_API_URL ?? ''}${src}` : src}
+                  alt={alt}
+                />
+              ),
+            }}
+          >
             {post.content}
           </ReactMarkdown>
         </div>
