@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { postsApi } from '../api'
 
 export function Home() {
@@ -27,9 +29,11 @@ export function Home() {
             <h2 className="feed-title">
               <Link to={`/posts/${post.id}`}>{post.title}</Link>
             </h2>
-            <p className="feed-excerpt">
-              {post.content.slice(0, 160)}{post.content.length > 160 && '…'}
-            </p>
+            <div className="feed-excerpt markdown">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {post.content}
+              </ReactMarkdown>
+            </div>
             <Link to={`/posts/${post.id}`} className="feed-more">
               続きを読む →
             </Link>
