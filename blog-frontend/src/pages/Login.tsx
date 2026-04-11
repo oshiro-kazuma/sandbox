@@ -27,10 +27,10 @@ export function Login() {
   }
 
   return (
-    <main className="container">
+    <div className="auth-wrap">
       <div className="form-card">
         <h1>ログイン</h1>
-        <p className="form-note">このブログは管理者のみ利用できます。</p>
+        <p className="form-note">このブログは管理者のみ利用できます</p>
         {error && <p className="form-error">{error}</p>}
         <form onSubmit={handleSubmit}>
           <label>
@@ -57,6 +57,6 @@ export function Login() {
           </button>
         </form>
       </div>
-    </main>
+    </div>
   )
 }

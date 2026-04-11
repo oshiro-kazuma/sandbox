@@ -12,17 +12,19 @@ export function Navbar() {
 
   return (
     <nav className="navbar">
-      <Link to="/" className="nav-brand">Blog</Link>
-      <div className="nav-links">
-        {user ? (
-          <>
-            <span className="nav-user">{user.username}</span>
-            <Link to="/dashboard">ダッシュボード</Link>
-            <button onClick={handleLogout} className="btn-link">ログアウト</button>
-          </>
-        ) : (
-          <Link to="/login">ログイン</Link>
-        )}
+      <div className="navbar-inner">
+        <Link to="/" className="nav-brand">Blog</Link>
+        <div className="nav-links">
+          {user ? (
+            <>
+              <span className="nav-user">{user.username}</span>
+              <Link to="/dashboard">ダッシュボード</Link>
+              <button onClick={handleLogout} className="btn-link">ログアウト</button>
+            </>
+          ) : (
+            <Link to="/login">ログイン</Link>
+          )}
+        </div>
       </div>
     </nav>
   )

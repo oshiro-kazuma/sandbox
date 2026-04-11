@@ -12,7 +12,7 @@ export function PostDetail() {
     enabled: !!id,
   })
 
-  if (isLoading) return <div className="loading">読み込み中...</div>
+  if (isLoading) return <div className="loading">読み込み中…</div>
   if (error) return <div className="error">記事が見つかりませんでした</div>
   if (!post) return null
 
@@ -21,11 +21,13 @@ export function PostDetail() {
       <Link to="/" className="back-link">← 一覧に戻る</Link>
       <article className="post-detail">
         <header>
-          <h1>{post.title}</h1>
           <p className="post-meta">
-            {new Date(post.created_at).toLocaleDateString('ja-JP')}
+            {new Date(post.created_at).toLocaleDateString('ja-JP', {
+              year: 'numeric', month: 'long', day: 'numeric',
+            })}
             {post.status === 'draft' && <span className="badge-draft">下書き</span>}
           </p>
+          <h1>{post.title}</h1>
         </header>
         <div className="post-content markdown">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
