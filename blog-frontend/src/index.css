@@ -153,22 +153,10 @@ h2 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; line-height:
 .feed-title a:hover { color: var(--blue); text-decoration: none; }
 
 .feed-excerpt {
-  position: relative;
-  max-height: 7.5rem;
-  overflow: hidden;
-  margin-bottom: 1.1rem;
   color: var(--text-2);
   font-size: 0.975rem;
   line-height: 1.7;
-}
-.feed-excerpt::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 3.5rem;
-  background: linear-gradient(to bottom, transparent, var(--bg));
+  margin-bottom: 0;
 }
 
 .feed-more {

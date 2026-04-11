@@ -34,9 +34,6 @@ export function Home() {
                 {post.content}
               </ReactMarkdown>
             </div>
-            <Link to={`/posts/${post.id}`} className="feed-more">
-              続きを読む →
-            </Link>
           </article>
         ))}
       </div>
