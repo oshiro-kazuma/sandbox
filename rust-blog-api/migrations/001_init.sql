@@ -1,10 +1,10 @@
 CREATE TABLE IF NOT EXISTS users (
-    id          TEXT PRIMARY KEY,
-    username    TEXT NOT NULL UNIQUE,
-    email       TEXT NOT NULL UNIQUE,
+    id            TEXT PRIMARY KEY,
+    username      TEXT NOT NULL UNIQUE,
+    email         TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
-    role        TEXT NOT NULL DEFAULT 'author',  -- 'admin' | 'author'
-    created_at  TEXT NOT NULL
+    role          TEXT NOT NULL DEFAULT 'author',  -- 'admin' | 'author'
+    created_at    TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS posts (
