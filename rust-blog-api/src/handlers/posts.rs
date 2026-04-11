@@ -114,8 +114,8 @@ pub async fn create_post(
     let now = Utc::now().to_rfc3339();
 
     sqlx::query(
-        "INSERT INTO posts (id, title, slug, content, author_id, status, created_at, updated_at, location)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO posts (id, title, slug, content, author_id, status, created_at, updated_at, location, post_date)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
     )
     .bind(&id)
     .bind(&body.title)
@@ -126,6 +126,7 @@ pub async fn create_post(
     .bind(&now)
     .bind(&now)
     .bind(&body.location)
+    .bind(&body.post_date)
     .execute(&state.db)
     .await
     .map_err(|e| match e {
@@ -145,6 +146,7 @@ pub async fn create_post(
         created_at: now.clone(),
         updated_at: now,
         location: body.location,
+        post_date: body.post_date,
     };
     Ok((axum::http::StatusCode::CREATED, Json(post)))
 }
@@ -181,10 +183,11 @@ pub async fn update_post(
     let content = body.content.unwrap_or(post.content);
     let status = body.status.unwrap_or(post.status);
     let location = if body.location.is_some() { body.location } else { post.location };
+    let post_date = if body.post_date.is_some() { body.post_date } else { post.post_date };
     let updated_at = Utc::now().to_rfc3339();
 
     sqlx::query(
-        "UPDATE posts SET title = ?, slug = ?, content = ?, status = ?, updated_at = ?, location = ?
+        "UPDATE posts SET title = ?, slug = ?, content = ?, status = ?, updated_at = ?, location = ?, post_date = ?
          WHERE id = ?",
     )
     .bind(&title)
@@ -193,11 +196,12 @@ pub async fn update_post(
     .bind(&status)
     .bind(&updated_at)
     .bind(&location)
+    .bind(&post_date)
     .bind(&id)
     .execute(&state.db)
     .await?;
 
-    Ok(Json(Post { id, title, slug, content, author_id: post.author_id, status, created_at: post.created_at, updated_at, location }))
+    Ok(Json(Post { id, title, slug, content, author_id: post.author_id, status, created_at: post.created_at, updated_at, location, post_date }))
 }
 
 /// 投稿削除（作成者 or admin）
