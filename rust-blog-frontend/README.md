@@ -2,7 +2,7 @@
 
 React + TypeScript + Vite によるシングルユーザー向けブログフロントエンド。
 
-**URL:** https://ramen-blog-rs.vercel.app/
+[![Vercel](https://img.shields.io/badge/vercel-deployed-black?logo=vercel&logoColor=white)](https://ramen-blog-rs.vercel.app/)
 
 ## Tech Stack
 
