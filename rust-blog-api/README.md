@@ -2,6 +2,10 @@
 
 Rust + Axum + SQLite によるシングルユーザー向けブログ REST API。
 
+[![Vercel](https://img.shields.io/badge/vercel-deployed-black?logo=vercel&logoColor=white)](https://ramen-blog-rs.vercel.app/)
+
+フロントエンド: [rust-blog-frontend](../rust-blog-frontend)
+
 ## Tech Stack
 
 - **Rust** 1.85+（edition 2024）
