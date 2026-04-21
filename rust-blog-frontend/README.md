@@ -2,6 +2,10 @@
 
 React + TypeScript + Vite によるシングルユーザー向けブログフロントエンド。
 
+[![Vercel](https://img.shields.io/badge/vercel-deployed-black?logo=vercel&logoColor=white)](https://ramen-blog-rs.vercel.app/)
+
+🚀 **[ら〜めんブログ🍜](https://ramen-blog-rs.vercel.app/)** — 公開中
+
 ## Tech Stack
 
 - **React** 18 + **TypeScript**
