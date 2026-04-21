@@ -2,6 +2,7 @@ use axum::{
     routing::{get, post},
     Router,
 };
+use axum::response::IntoResponse;
 use sqlx::sqlite::SqlitePoolOptions;
 use tower_http::{cors::CorsLayer, services::ServeDir};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
@@ -121,6 +122,7 @@ async fn main() {
     let state = AppState { db, jwt_secret, upload_dir: upload_dir.clone() };
 
     let app = Router::new()
+        .route("/", get(|| async { "ok".into_response() }))
         .merge(SwaggerUi::new("/api-docs").url("/api-docs/openapi.json", ApiDoc::openapi()))
         .nest_service("/uploads", ServeDir::new(&upload_dir))
         .nest("/api", api_routes())
