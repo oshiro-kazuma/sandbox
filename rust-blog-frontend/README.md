@@ -4,6 +4,8 @@ React + TypeScript + Vite によるシングルユーザー向けブログフロ
 
 [![Vercel](https://img.shields.io/badge/vercel-deployed-black?logo=vercel&logoColor=white)](https://ramen-blog-rs.vercel.app/)
 
+**Blog:** [ら〜めんブログ🍜](https://ramen-blog-rs.vercel.app/)
+
 ## Tech Stack
 
 - **React** 18 + **TypeScript**
