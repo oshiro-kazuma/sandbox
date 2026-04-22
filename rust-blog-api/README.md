@@ -2,7 +2,7 @@
 
 Rust + Axum + SQLite によるシングルユーザー向けブログ REST API。
 
-[![Fly.io](https://img.shields.io/badge/fly.io-deployed-purple?logo=flydotio&logoColor=white)](https://rust-blog-api.fly.dev)
+[![Fly.io](https://img.shields.io/badge/fly.io-deployed-purple?logo=flydotio&logoColor=white)](https://rust-blog-api.fly.dev/api-docs/)
 [![Vercel](https://img.shields.io/badge/vercel-deployed-black?logo=vercel&logoColor=white)](https://ramen-blog-rs.vercel.app/)
 
 🚀 **[ら〜めんブログ🍜](https://ramen-blog-rs.vercel.app/)** — 公開中
